@@ -1,0 +1,51 @@
+version: '3'
+services:
+  api:
+    image: node:14
+    ports :
+      - "80:80"
+    volumes:
+      - ./api:/api
+    depends_on:
+      - database
+    networks:
+      - apiDb
+      - apiExternal
+    working_dir: /api
+    command: npm start
+
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: api_database
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    networks:
+      - apiDb
+      - pmaDb
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    depends_on:
+      - database
+    ports:
+      - "8888:80"
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - pmaDb
+      - pmaExternal
+
+networks:
+  apiExternal:
+    internal: false
+  pmaExternal:
+    internal: false
+  apiDb:
+    internal: true
+  pmaDb:
+    internal: true

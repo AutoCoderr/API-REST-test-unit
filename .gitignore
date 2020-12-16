@@ -1,0 +1,5 @@
+/.idea
+/db_data
+/api/node_modules
+/api/*.js
+/api/package-lock.json
