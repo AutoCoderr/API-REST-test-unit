@@ -42,7 +42,7 @@ UserModel.init(
             allowNull: false
         },
         birthday: {
-            type: new DataTypes.STRING(15),
+            type: new DataTypes.DATE(),
             allowNull: false
         }
     },

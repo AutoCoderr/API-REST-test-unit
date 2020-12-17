@@ -4,4 +4,5 @@
 /api/*.js
 /api/Models/*.js
 /api/Entities/*.js
+/api/spec/*.js
 /api/package-lock.json

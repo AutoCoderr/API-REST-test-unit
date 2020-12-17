@@ -3,10 +3,22 @@ import { UserModel, IUser } from "./Models/UserModel";
 import { TodolistModel } from "./Models/TodolistModel";
 import { ItemModel, IItem } from "./Models/ItemModel";
 
+import { UserController } from "./Controllers/UserController";
+
+const express = require("express");
+
+const app = express();
+
 (async () => {
     await Migration.migrate();
 
-    const user: IUser = {
+    console.log("API started")
+
+    app.use('/user', UserController);
+
+    app.listen(80);
+
+    /*const user: IUser = {
         email: "toto@toto.com",
         firstname: "John",
         lastname: "Marston",
@@ -23,5 +35,5 @@ import { ItemModel, IItem } from "./Models/ItemModel";
         creationDate: "2020-12-17",
         TodolistId: newTodoList.id
     }
-    const newItem: ItemModel = await ItemModel.create(item);
+    const newItem: ItemModel = await ItemModel.create(item);*/
 })()
