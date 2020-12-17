@@ -25,4 +25,4 @@ Todolist.init(
 );
 
 Todolist.belongsTo(User);
-User.hasMany(Todolist);
+User.hasOne(Todolist);

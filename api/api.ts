@@ -47,8 +47,8 @@ const app = express();
         where: {id: user.id},
         include: TodolistModel
     });
-    console.log("User > Todolists");
-    console.log((new User()).hydrate(<UserModel>foundUser).getTodolists());
+    console.log("User > Todolist");
+    console.log((new User()).hydrate(<UserModel>foundUser).getTodolist());
 
     const foundTodolist: null|TodolistModel = await TodolistModel.findOne({
        where: {id: todoList.id},

@@ -11,7 +11,7 @@ export class User extends EntityManager {
     birthday: Date;
     password: string
 
-    Todolists: null|Array<Todolist> = null;
+    Todolist: null|Todolist = null;
 
     constructor() {
         super();
@@ -38,15 +38,11 @@ export class User extends EntityManager {
         this.password = password;
     }
 
-    getTodolists() {
-        if (this.Todolists instanceof Array) {
-            for (let i=0;i<this.Todolists.length;i++) {
-                if (!(this.Todolists[i] instanceof Todolist)) {
-                    this.Todolists[i] = (new Todolist()).hydrate(this.Todolists[i]);
-                }
-            }
+    getTodolist() {
+        if (!(this.Todolist instanceof Todolist) && this.Todolist != null) {
+            this.Todolist = (new Todolist()).hydrate(this.Todolist);
         }
-        return this.Todolists
+        return this.Todolist;
     }
 
     isValid() {
