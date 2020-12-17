@@ -46,13 +46,18 @@ export class User extends EntityManager {
     }
 
     isValid() {
+        let errors: Array<string> = []
         let regexEmail = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-        if (!regexEmail.test(this.email)) return false;
-        if (this.firstname === "" || this.lastname === "") return false;
+        if (!regexEmail.test(this.email)) errors.push("INVALID_MAIL");
+        if (this.firstname === "" || this.lastname === "") errors.push("FIRSTNAME_LASTNAME_INVALID");
         let currentDate = new Date();
-        if (currentDate.getTime() - this.birthday.getTime() < 13 * 365.25 * 24 * 60 * 60 * 1000) return false;
-        if (this.password.length < 8 || this.password.length > 40) return false;
-        return true;
+        if (currentDate.getTime() - this.birthday.getTime() < 13 * 365.25 * 24 * 60 * 60 * 1000) errors.push("TOO_YOUNG");
+        if (this.password.length < 8)
+            errors.push("TOO_SHORT_PASSWORD");
+        else if (this.password.length > 40)
+            errors.push("TOO_LONG_PASSWORD");
+
+        return errors.length > 0 ? errors : true;
     }
 }
 

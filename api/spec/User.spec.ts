@@ -16,7 +16,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: false,
+        exceptValid: ["FIRSTNAME_LASTNAME_INVALID"],
         exceptSave: User
     },
     {
@@ -25,7 +25,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: false,
+        exceptValid: ["FIRSTNAME_LASTNAME_INVALID"],
         exceptSave: User
     },
     {
@@ -34,7 +34,7 @@ const users = [
         email: "zefuizeufhi",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: false,
+        exceptValid: ["INVALID_MAIL"],
         exceptSave: User
     },
     {
@@ -43,17 +43,26 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2010-08-10",
         password: "12345678",
-        exceptValid: false,
+        exceptValid: ["TOO_YOUNG"],
         exceptSave: User
     },
     {
         firstname: "toto",
         lastname: "du 78",
         email: "totodu78@hotmail.com",
-        birthday: "2010-08-10",
+        birthday: "2005-08-10",
         password: "1234345678910111213141516171819202122232425",
-        exceptValid: false,
+        exceptValid: ["TOO_LONG_PASSWORD"],
         exceptSave: false
+    },
+    {
+        firstname: "toto",
+        lastname: "du 78",
+        email: "totodu78@hotmail.com",
+        birthday: "2005-08-10",
+        password: "1234",
+        exceptValid: ["TOO_SHORT_PASSWORD"],
+        exceptSave: User
     }
 ];
 
@@ -70,7 +79,7 @@ for (let i=0;i<users.length;i++) {
         it("The excepted value of isValid() is : "+user.exceptValid.toString(),function() {
             var value=userObject.isValid();
             // @ts-ignore
-            expect(value).toBe(user.exceptValid);
+            expect(value).toEqual(user.exceptValid);
         });
         // @ts-ignore
         it("The excepted value of save() is : "+user.exceptSave.toString(),async () => {

@@ -1,5 +1,6 @@
 import { EntityManager } from "../EntityManager";
 import { Todolist as TodolistModel } from "../Models/Todolist";
+import { User as UserModel } from "../Models/User"
 import { User } from "./User";
 import { Item } from "./Item";
 
@@ -32,4 +33,32 @@ export class Todolist extends EntityManager {
         }
         return this.Items
     }
+
+    async isValid() {
+        let errors: Array<string> = [];
+        if (this.UserId == null) {
+            errors.push("USER_ID_NOT_SPECIFIED");
+            return errors;
+        }
+
+        if (this.User == null) {
+            const user: null|UserModel = await UserModel.findOne({
+                where: {id: this.UserId}
+            });
+            if (user == null) {
+                errors.push("USER_NOT_EXIST");
+                return errors;
+            }
+            this.User = new User().hydrate(<UserModel>user);
+        }
+
+        const userTodolists = await TodolistModel.findAll({
+            where: {UserId: this.UserId}
+        });
+
+        if (userTodolists.length > 0) errors.push("USER_HAS_ALREADY_A_TODOLIST");
+
+        return errors.length > 0 ? errors : true;
+    }
+
 }

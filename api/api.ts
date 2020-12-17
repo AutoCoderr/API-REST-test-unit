@@ -6,6 +6,7 @@ import { Todolist } from "./Entities/Todolist";
 import { Item as ItemModel, IItem } from "./Models/Item";
 
 import { UserController } from "./Controllers/UserController";
+import { TodolistController } from "./Controllers/TodolistController";
 import {Item} from "./Entities/Item";
 
 const express = require("express");
@@ -18,6 +19,7 @@ const app = express();
     console.log("API started")
 
     app.use('/user', UserController);
+    app.use('/todolist', TodolistController);
 
     app.listen(80);
 
