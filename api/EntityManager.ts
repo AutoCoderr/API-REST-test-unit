@@ -1,11 +1,19 @@
-import {Model, where} from "sequelize";
-import {IUser, UserModel} from "./Models/UserModel";
+import {Model} from "sequelize";
 
 export class EntityManager {
     modelInstance: null|typeof Model = null;
     id: null|number = null;
 
     constructor() {
+    }
+
+    hydrate(entry: Object) {// @ts-ignore
+        for (let attr in entry.dataValues) {// @ts-ignore
+            if (typeof(this[attr]) != "undefined") {// @ts-ignore
+                this[attr] = entry.dataValues[attr];
+            }
+        }
+        return this;
     }
 
 
@@ -23,21 +31,27 @@ export class EntityManager {
             }
         }
         if (this.id == null) {
+            let entry;
             try {// @ts-ignore
-                await this.modelInstance.create(entryObject);
+                entry = await this.modelInstance.create(entryObject);
             } catch(e) {
                 return false;
             }
-            return true;
+            return entry;
         }
-        /*const user: IUser = {
-            email: this.email,
-            firstname: this.firstname,
-            lastname: this.lastname,
-            birthday: addMissingZero(this.birthday.getFullYear(),4)+"-"+addMissingZero(this.birthday.getMonth()+1)+"-"+addMissingZero(this.birthday.getDate()),
-            password: this.password
+    }
+
+    async delete() {
+        try { // @ts-ignore
+            this.modelInstance.destroy({
+                where: {
+                    id: this.id
+                }
+            })
+        } catch (e) {
+            return false;
         }
-        const createdUser: UserModel = await UserModel.create(user);*/
+        return true;
     }
 }
 

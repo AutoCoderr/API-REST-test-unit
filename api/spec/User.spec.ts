@@ -1,28 +1,90 @@
 import { User } from "../Entities/User";
+import {Model} from "sequelize";
 
 const users = [
-    {classe: new User("toto", "du 78", "totodu78@hotmail.com", new Date("2005-08-10"), "12345678"), exceptValid: true},
-    {classe: new User(" ", "du 78", "totodu78@hotmail.com", new Date("2005-08-10"), "12345678"), exceptValid: false},
-    {classe: new User("toto", "", "totodu78@hotmail.com", new Date("2005-08-10"), "12345678"), exceptValid: false},
-    {classe: new User("toto", "du 78", "zefzefezfezfez", new Date("2005-08-10"), "12345678"), exceptValid: false},
-    {classe: new User("toto", "du 78", "totodu78@hotmail.com", new Date("2010-08-10"), "12345678"), exceptValid: false},
-    {classe: new User("toto", "du 78", "totodu78@hotmail.com", new Date("2005-08-10"), "1234345678910111213141516171819202122232425"), exceptValid: false},
+    {
+        firstname: "toto",
+        lastname: "du 78",
+        email: "totodu78@hotmail.com",
+        birthday: "2005-08-10",
+        password: "12345678",
+        exceptValid: true,
+        exceptSave: Model
+    },
+    {
+        firstname: " ",
+        lastname: "du 78",
+        email: "totodu78@hotmail.com",
+        birthday: "2005-08-10",
+        password: "12345678",
+        exceptValid: false,
+        exceptSave: Model
+    },
+    {
+        firstname: "toto",
+        lastname: "",
+        email: "totodu78@hotmail.com",
+        birthday: "2005-08-10",
+        password: "12345678",
+        exceptValid: false,
+        exceptSave: Model
+    },
+    {
+        firstname: "toto",
+        lastname: "du 78",
+        email: "zefuizeufhi",
+        birthday: "2005-08-10",
+        password: "12345678",
+        exceptValid: false,
+        exceptSave: Model
+    },
+    {
+        firstname: "toto",
+        lastname: "du 78",
+        email: "totodu78@hotmail.com",
+        birthday: "2010-08-10",
+        password: "12345678",
+        exceptValid: false,
+        exceptSave: Model
+    },
+    {
+        firstname: "toto",
+        lastname: "du 78",
+        email: "totodu78@hotmail.com",
+        birthday: "2010-08-10",
+        password: "1234345678910111213141516171819202122232425",
+        exceptValid: false,
+        exceptSave: false
+    }
 ];
 
 for (let i=0;i<users.length;i++) {
     const user = users[i]; // @ts-ignore
-    describe("user N°"+(i+1),function(){
+    describe("Checking of user N°"+(i+1),function(){
+        let userObject = new User();
+        userObject.setFirstname(user.firstname);
+        userObject.setLastname(user.lastname);
+        userObject.setEmail(user.email);
+        userObject.setBirthday(user.birthday);
+        userObject.setPassword(user.password);
         // @ts-ignore
-        it("The excepted value of isValid() is : "+user.except.toString(),function() {
-            var value=user.classe.isValid();
+        it("The excepted value of isValid() is : "+user.exceptValid.toString(),function() {
+            var value=userObject.isValid();
             // @ts-ignore
-            expect(value).toBe(user.except);
+            expect(value).toBe(user.exceptValid);
         });
         // @ts-ignore
-        it("The excepted value of save() is : "+user.except.toString(),async function() {
-            var value=await user.classe.save();
-            // @ts-ignore
-            expect(value).toBe(user.except);
+        it("The excepted value of save() is : "+user.exceptSave.toString(),async () => {
+            const entry=await userObject.save();
+
+            if (typeof(user.exceptSave) == "boolean") {// @ts-ignore
+                expect(entry).toBe(user.exceptSave);
+            } else {// @ts-ignore
+                expect(entry).toBeInstanceOf(user.exceptSave);
+                // @ts-ignore
+                const deleted = await(new User()).hydrate(<Object>entry).delete();// @ts-ignore
+                expect(deleted).toBe(true);
+            }
         });
     });
 }

@@ -5,4 +5,5 @@
 /api/Models/*.js
 /api/Entities/*.js
 /api/spec/*.js
+/api/Controllers/*.js
 /api/package-lock.json
