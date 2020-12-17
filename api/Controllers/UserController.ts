@@ -14,7 +14,7 @@ UserController.get('/create',async (req: any, res: any) => {
     if (user.isValid()) {
         let userSaved = await user.save()
         if (userSaved) {
-            res.send(JSON.stringify({status: "success", msg: "User successfully created", id: userSaved.dataValues.id}));
+            res.send(JSON.stringify({status: "success", msg: "User successfully created", id: userSaved.id}));
             return;
         }
     }

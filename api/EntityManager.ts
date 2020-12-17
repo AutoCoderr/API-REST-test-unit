@@ -37,11 +37,12 @@ export class EntityManager {
             } catch(e) {
                 return false;
             }
-            return entry;
+            this.id = entry.dataValues.id;
+            return this
         }
     }
 
-    async delete() {
+    delete() {
         try { // @ts-ignore
             this.modelInstance.destroy({
                 where: {

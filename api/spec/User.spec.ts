@@ -1,5 +1,4 @@
 import { User } from "../Entities/User";
-import {Model} from "sequelize";
 
 const users = [
     {
@@ -9,7 +8,7 @@ const users = [
         birthday: "2005-08-10",
         password: "12345678",
         exceptValid: true,
-        exceptSave: Model
+        exceptSave: User
     },
     {
         firstname: " ",
@@ -18,7 +17,7 @@ const users = [
         birthday: "2005-08-10",
         password: "12345678",
         exceptValid: false,
-        exceptSave: Model
+        exceptSave: User
     },
     {
         firstname: "toto",
@@ -27,7 +26,7 @@ const users = [
         birthday: "2005-08-10",
         password: "12345678",
         exceptValid: false,
-        exceptSave: Model
+        exceptSave: User
     },
     {
         firstname: "toto",
@@ -36,7 +35,7 @@ const users = [
         birthday: "2005-08-10",
         password: "12345678",
         exceptValid: false,
-        exceptSave: Model
+        exceptSave: User
     },
     {
         firstname: "toto",
@@ -45,7 +44,7 @@ const users = [
         birthday: "2010-08-10",
         password: "12345678",
         exceptValid: false,
-        exceptSave: Model
+        exceptSave: User
     },
     {
         firstname: "toto",
@@ -75,14 +74,14 @@ for (let i=0;i<users.length;i++) {
         });
         // @ts-ignore
         it("The excepted value of save() is : "+user.exceptSave.toString(),async () => {
-            const entry=await userObject.save();
+            const createdUser = await userObject.save();
 
             if (typeof(user.exceptSave) == "boolean") {// @ts-ignore
-                expect(entry).toBe(user.exceptSave);
+                expect(createdUser).toBe(user.exceptSave);
             } else {// @ts-ignore
-                expect(entry).toBeInstanceOf(user.exceptSave);
+                expect(createdUser).toBeInstanceOf(user.exceptSave);
                 // @ts-ignore
-                const deleted = await(new User()).hydrate(<Object>entry).delete();// @ts-ignore
+                const deleted = createdUser.delete();// @ts-ignore
                 expect(deleted).toBe(true);
             }
         });

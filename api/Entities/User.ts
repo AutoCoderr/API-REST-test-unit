@@ -1,7 +1,8 @@
 import { User as Usermodel } from "../Models/User";
 import { EntityManager } from "../EntityManager";
+import { Todolist } from "./Todolist";
 
-export class User extends EntityManager{
+export class User extends EntityManager {
     modelInstance = Usermodel;
 
     email: string;
@@ -9,6 +10,8 @@ export class User extends EntityManager{
     lastname: string;
     birthday: Date;
     password: string
+
+    Todolists: null|Array<Todolist> = null;
 
     constructor() {
         super();
@@ -33,6 +36,17 @@ export class User extends EntityManager{
     }
     setPassword(password: string) {
         this.password = password;
+    }
+
+    getTodolists() {
+        if (this.Todolists instanceof Array) {
+            for (let i=0;i<this.Todolists.length;i++) {
+                if (!(this.Todolists[i] instanceof Todolist)) {
+                    this.Todolists[i] = (new Todolist()).hydrate(this.Todolists[i]);
+                }
+            }
+        }
+        return this.Todolists
     }
 
     isValid() {
