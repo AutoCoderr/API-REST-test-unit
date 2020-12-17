@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../DB";
-import { TodolistModel } from "./TodolistModel";
+import { Todolist } from "./Todolist";
 
 export interface IItem {
     name: string;
@@ -9,14 +9,14 @@ export interface IItem {
     TodolistId: number;
 }
 
-export class ItemModel extends Model {
+export class Item extends Model {
     public id!: number; // Note that the `null assertion` `!` is required in strict mode.
     public name!: string;
     public content!: string;
     public creationDate!: string;
 }
 
-ItemModel.init(
+Item.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
@@ -42,4 +42,5 @@ ItemModel.init(
     }
 );
 
-ItemModel.belongsTo(TodolistModel);
+Item.belongsTo(Todolist);
+Todolist.hasMany(Item);

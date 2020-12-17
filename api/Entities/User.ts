@@ -1,8 +1,8 @@
-import { UserModel } from "../Models/UserModel";
+import { User as Usermodel } from "../Models/User";
 import { EntityManager } from "../EntityManager";
 
 export class User extends EntityManager{
-    modelInstance = UserModel;
+    modelInstance = Usermodel;
 
     email: string;
     firstname: string;

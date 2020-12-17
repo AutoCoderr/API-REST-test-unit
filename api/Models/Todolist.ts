@@ -1,16 +1,16 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../DB";
-import { UserModel } from "./UserModel";
+import { User } from "./User";
 
 export interface ITodolist {
     UserId: number;
 }
 
-export class TodolistModel extends Model {
+export class Todolist extends Model {
     public id!: number
 }
 
-TodolistModel.init(
+Todolist.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
@@ -24,4 +24,5 @@ TodolistModel.init(
     }
 );
 
-TodolistModel.belongsTo(UserModel);
+Todolist.belongsTo(User);
+User.hasMany(Todolist);

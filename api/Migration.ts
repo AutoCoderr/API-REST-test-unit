@@ -1,12 +1,12 @@
-import { UserModel } from "./Models/UserModel";
-import { TodolistModel } from "./Models/TodolistModel";
-import { ItemModel } from "./Models/ItemModel";
+import { User } from "./Models/User";
+import { Todolist } from "./Models/Todolist";
+import { Item } from "./Models/Item";
 
 export class Migration {
     static tables = [
-        UserModel,
-        TodolistModel,
-        ItemModel
+        User,
+        Todolist,
+        Item
     ];
 
     static async migrate() {

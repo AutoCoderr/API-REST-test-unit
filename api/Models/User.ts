@@ -9,7 +9,7 @@ export interface IUser {
     birthday: string;
 }
 
-export class UserModel extends Model {
+export class User extends Model {
     public id!: number;
     public email!: string;
     public firstname!: string;
@@ -18,7 +18,7 @@ export class UserModel extends Model {
     public birthday!: string;
 }
 
-UserModel.init(
+User.init(
     {
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
