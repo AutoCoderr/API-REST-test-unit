@@ -6,6 +6,7 @@ import { Todolist } from "./Entities/Todolist";
 import { Item as ItemModel, IItem } from "./Models/Item";
 
 import { UserController } from "./Controllers/UserController";
+import {Item} from "./Entities/Item";
 
 const express = require("express");
 
@@ -20,7 +21,7 @@ const app = express();
 
     app.listen(80);
 
-    const user = new User();
+    /*const user = new User();
 
     user.setFirstname("John");
     user.setLastname("Marston");
@@ -31,33 +32,38 @@ const app = express();
 
 
     //const newTodoList: TodolistModel = await TodolistModel.create({UserId: user.id});
-    let todoList = new Todolist();
+    const todoList = new Todolist();
     todoList.setUserId(<number>user.id);
     await todoList.save();
 
-    const item: IItem = {
-        name: "Un item",
-        content: "iulhiuflhezfuezifhuifhezuifhoiezhfiuezhfo",
-        creationDate: "2020-12-17",
-        TodolistId: <number>todoList.id
-    }
-    const newItem: ItemModel = await ItemModel.create(item);
+    const item = new Item();
+    item.setName("Un item");
+    item.setContent("iulhiuflhezfuezifhuifhezuifhoiezhfiuezhfo");
+    item.setCreationDate("2020-12-17");
+    item.setTodolistId(<number>todoList.id);
+    await item.save();
 
     const foundUser: null|UserModel = await UserModel.findOne({
         where: {id: user.id},
         include: TodolistModel
     });
-    if (foundUser != null) {// @ts-ignore
-        console.log((new User()).hydrate(foundUser).getTodolists());
-    }
+    console.log("User > Todolists");
+    console.log((new User()).hydrate(<UserModel>foundUser).getTodolists());
 
     const foundTodolist: null|TodolistModel = await TodolistModel.findOne({
        where: {id: todoList.id},
-       include: UserModel
+       include: [UserModel,ItemModel]
     });
-    console.log(new Todolist().hydrate(<TodolistModel>foundTodolist).getUser());
+    console.log("Todolist > User");
+    console.log((new Todolist()).hydrate(<TodolistModel>foundTodolist).getUser());
+    console.log('Todolist > Items');
+    console.log((new Todolist()).hydrate(<TodolistModel>foundTodolist).getItems());
 
-    if (foundTodolist != null) {// @ts-ignore
-        console.log(foundTodolist.Items)
-    }
+    const foundItem: null|ItemModel = await ItemModel.findOne({
+        where: {id: item.id},
+        include: TodolistModel
+    });
+
+    console.log("Item > Todolist");
+    console.log((new Item()).hydrate(<ItemModel>foundItem).getTodolist());*/
 })();
