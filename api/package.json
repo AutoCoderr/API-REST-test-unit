@@ -19,6 +19,7 @@
   "homepage": "https://github.com/AutoCoderr/API-REST-test-unit#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "jasmine": "^3.6.3",
     "mysql2": "^2.2.5",
     "sequelize": "^6.3.5"
   },

@@ -2,4 +2,5 @@
 /db_data
 /api/node_modules
 /api/*.js
+/api/Models/*.js
 /api/package-lock.json
