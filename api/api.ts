@@ -8,6 +8,9 @@ import { Item as ItemModel, IItem } from "./Models/Item";
 import { UserController } from "./Controllers/UserController";
 import { TodolistController } from "./Controllers/TodolistController";
 import {Item} from "./Entities/Item";
+import {UserRepository} from "./Repositories/UserRepository";
+import {TodolistRepository} from "./Repositories/TodolistRepository";
+import {ItemRepository} from "./Repositories/ItemRepository";
 
 const express = require("express");
 
@@ -32,8 +35,6 @@ const app = express();
     user.setPassword("Manger des pâtes");
     await user.save();
 
-
-    //const newTodoList: TodolistModel = await TodolistModel.create({UserId: user.id});
     const todoList = new Todolist();
     todoList.setUserId(<number>user.id);
     await todoList.save();
@@ -45,27 +46,18 @@ const app = express();
     item.setTodolistId(<number>todoList.id);
     await item.save();
 
-    const foundUser: null|UserModel = await UserModel.findOne({
-        where: {id: user.id},
-        include: TodolistModel
-    });
+    const foundUser: null|User = await UserRepository.find(user.id);
     console.log("User > Todolist");
-    console.log((new User()).hydrate(<UserModel>foundUser).getTodolist());
+    console.log((<User>foundUser).getTodolist());
 
-    const foundTodolist: null|TodolistModel = await TodolistModel.findOne({
-       where: {id: todoList.id},
-       include: [UserModel,ItemModel]
-    });
+    const foundTodolist: null|Todolist = await TodolistRepository.find(todoList.id);
     console.log("Todolist > User");
-    console.log((new Todolist()).hydrate(<TodolistModel>foundTodolist).getUser());
+    console.log((<Todolist>foundTodolist).getUser());
     console.log('Todolist > Items');
-    console.log((new Todolist()).hydrate(<TodolistModel>foundTodolist).getItems());
+    console.log((<Todolist>foundTodolist).getItems());
 
-    const foundItem: null|ItemModel = await ItemModel.findOne({
-        where: {id: item.id},
-        include: TodolistModel
-    });
+    const foundItem: null|Item = await ItemRepository.find(item.id);
 
     console.log("Item > Todolist");
-    console.log((new Item()).hydrate(<ItemModel>foundItem).getTodolist());*/
+    console.log((<Item>foundItem).getTodolist());*/
 })();

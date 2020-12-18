@@ -32,3 +32,14 @@ export class Item extends EntityManager {
         return this.Todolist;
     }
 }
+
+Todolist.prototype.getItems = function() {
+    if (this.Items instanceof Array) {
+        for (let i=0;i<this.Items.length;i++) {
+            if (!(this.Items[i] instanceof Item)) {
+                this.Items[i] = (new Item()).hydrate(this.Items[i]);
+            }
+        }
+    }
+    return this.Items
+}

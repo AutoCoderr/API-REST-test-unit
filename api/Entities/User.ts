@@ -1,6 +1,5 @@
 import { User as Usermodel } from "../Models/User";
 import { EntityManager } from "../EntityManager";
-import { Todolist } from "./Todolist";
 
 export class User extends EntityManager {
     modelInstance = Usermodel;
@@ -11,7 +10,7 @@ export class User extends EntityManager {
     birthday: Date;
     password: string
 
-    Todolist: null|Todolist = null;
+    Todolist: any = null;
 
     constructor() {
         super();
@@ -38,13 +37,6 @@ export class User extends EntityManager {
         this.password = password;
     }
 
-    getTodolist() {
-        if (!(this.Todolist instanceof Todolist) && this.Todolist != null) {
-            this.Todolist = (new Todolist()).hydrate(this.Todolist);
-        }
-        return this.Todolist;
-    }
-
     isValid() {
         let errors: Array<string> = []
         let regexEmail = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
@@ -58,6 +50,10 @@ export class User extends EntityManager {
             errors.push("TOO_LONG_PASSWORD");
 
         return errors.length > 0 ? errors : true;
+    }
+
+    getTodolist() {
+        return this.Todolist;
     }
 }
 
