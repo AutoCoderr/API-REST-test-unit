@@ -10,13 +10,33 @@ describe("Test numero 1", function () {
         const value = await todolist.isValid()
         // @ts-ignore
         expect(value).toBeInstanceOf(Array);
-
-        todolist.delete();
     });
 });
 
 // @ts-ignore
 describe("Test numero 2", function () {
+    let user =  new User()
+
+    user.setFirstname('Brenda');
+    user.setLastname('Montgommery');
+    user.setBirthday('1995-09-12');
+    user.setEmail('monemail@gmail.com');
+    user.setPassword('azerty1234');
+
+    // @ts-ignore
+    it("Test creation todolist sans spécifier de UserId", async function(){
+        await user.save()
+        let todolist = new Todolist();
+        const value = await todolist.isValid()
+        // @ts-ignore
+        expect(value).toBeInstanceOf(Array);
+
+        user.delete();
+    });
+});
+
+// @ts-ignore
+describe("Test numero 3", function () {
     let user =  new User()
 
     user.setFirstname('Brenda');
@@ -34,13 +54,12 @@ describe("Test numero 2", function () {
         // @ts-ignore
         expect(value).toBe(true);
 
-        todolist.delete();
         user.delete();
     });
 });
 
 // @ts-ignore
-describe("Test numero 3", function () {
+describe("Test numero 4", function () {
     let user =  new User()
 
     user.setFirstname('Brenda');
@@ -63,7 +82,6 @@ describe("Test numero 3", function () {
         expect(value).toBeInstanceOf(Array);
         
         todolist1.delete();
-        todolist2.delete();
         user.delete();
     });
 });
