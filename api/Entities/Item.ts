@@ -80,7 +80,7 @@ export class Item extends EntityManager {
         let lastItem = items[items.length-1];
 
         if ((<Date>this.creationDate).getTime() - lastItem.creationDate.getTime() < 30*60*1000) {
-            errors.push("LAST_ITEM_CREATED_AT_LESS_THE_30_MINUTES");
+            errors.push("LAST_ITEM_CREATED_LESS_THAN_30_MINUTES");
         }
 
         return errors.length > 0 ? errors : true;
