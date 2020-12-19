@@ -32,7 +32,7 @@ Item.init(
             allowNull: false
         },
         creationDate: {
-            type: new DataTypes.STRING(15),
+            type: new DataTypes.DATE(),
             allowNull: false
         }
     },

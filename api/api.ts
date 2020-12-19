@@ -16,8 +16,12 @@ const express = require("express");
 
 const app = express();
 
-(async () => {
+setTimeout(async () => {
     await Migration.migrate();
+    console.log("Database synchronized!");
+}, 2000);
+
+(async () => {
 
     console.log("API started")
 
@@ -47,6 +51,8 @@ const app = express();
     await item.save();
 
     const foundUser: null|User = await UserRepository.find(user.id);
+    console.log("User");
+    console.log(foundUser);
     console.log("User > Todolist");
     console.log((<User>foundUser).getTodolist());
 
