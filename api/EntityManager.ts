@@ -35,6 +35,7 @@ export class EntityManager {
             try {// @ts-ignore
                 entry = await this.modelInstance.create(entryObject);
             } catch(e) {
+                console.log(e);
                 return false;
             }
             this.id = entry.dataValues.id;

@@ -1,4 +1,4 @@
-import { User } from "../Entities/User";
+const User = require("../Entities/User").User;
 
 const users = [
     {
@@ -82,9 +82,8 @@ for (let i=0;i<users.length;i++) {
             expect(value).toEqual(user.exceptValid);
         });
         // @ts-ignore
-        it("The excepted value of save() is : "+user.exceptSave.toString(),async () => {
+        it("The excepted value of save() is : "+(user.exceptSave instanceof User ? "User": "false"),async () => {
             const createdUser = await userObject.save();
-
             if (typeof(user.exceptSave) == "boolean") {// @ts-ignore
                 expect(createdUser).toBe(user.exceptSave);
             } else {// @ts-ignore

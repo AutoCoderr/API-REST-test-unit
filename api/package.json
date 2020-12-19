@@ -5,7 +5,7 @@
   "main": "api.js",
   "scripts": {
     "start": "npx tsc && node api.js",
-    "test": "npx tsc && npx jasmine"
+    "test": "npx jasmine"
   },
   "repository": {
     "type": "git",
