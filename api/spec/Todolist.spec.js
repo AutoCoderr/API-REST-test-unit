@@ -9,7 +9,7 @@ describe("Test numero 1", function () {
         todolist.setUserId(15265126);
         const value = await todolist.isValid()
         // @ts-ignore
-        expect(value).toBeInstanceOf(Array);
+        expect(value).toEqual(["USER_NOT_EXIST"]);
     });
 });
 
@@ -29,7 +29,7 @@ describe("Test numero 2", function () {
         let todolist = new Todolist();
         const value = await todolist.isValid()
         // @ts-ignore
-        expect(value).toBeInstanceOf(Array);
+        expect(value).toEqual(["USER_ID_NOT_SPECIFIED"]);
 
         user.delete();
     });
@@ -79,7 +79,7 @@ describe("Test numero 4", function () {
         todolist2.setUserId(user.id);
         const value = await todolist2.isValid();
         // @ts-ignore
-        expect(value).toBeInstanceOf(Array);
+        expect(value).toEqual(["USER_HAS_ALREADY_A_TODOLIST"]);
         
         todolist1.delete();
         user.delete();
