@@ -7,6 +7,7 @@ import { Item as ItemModel, IItem } from "./Models/Item";
 
 import { UserController } from "./Controllers/UserController";
 import { TodolistController } from "./Controllers/TodolistController";
+import { ItemController } from "./Controllers/ItemController";
 import {Item} from "./Entities/Item";
 import {UserRepository} from "./Repositories/UserRepository";
 import {TodolistRepository} from "./Repositories/TodolistRepository";
@@ -27,6 +28,7 @@ setTimeout(async () => {
 
     app.use('/user', UserController);
     app.use('/todolist', TodolistController);
+    app.use('/item', ItemController);
 
     app.listen(80);
 
