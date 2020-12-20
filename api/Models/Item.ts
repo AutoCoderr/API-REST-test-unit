@@ -30,10 +30,6 @@ Item.init(
         content: {
             type: new DataTypes.STRING(1000),
             allowNull: false
-        },
-        creationDate: {
-            type: new DataTypes.DATE(),
-            allowNull: false
         }
     },
     {

@@ -21,13 +21,8 @@ export class EntityManager {
         let entryObject: Object = {};
         for (let attr in this) {
             if (attr != "modelInstance" && attr != "id") {
-                if (this[attr] instanceof Date) {
-                    // @ts-ignore
-                    entryObject[attr] = addMissingZero(this[attr].getFullYear(),4)+"-"+addMissingZero(this[attr].getMonth()+1)+"-"+addMissingZero(this[attr].getDate());
-                } else {
-                    // @ts-ignore
-                    entryObject[attr] = this[attr];
-                }
+                // @ts-ignore
+                entryObject[attr] = this[attr];
             }
         }
         if (this.id == null) {

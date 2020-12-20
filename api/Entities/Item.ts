@@ -2,12 +2,14 @@ import { EntityManager } from "../EntityManager";
 import { Item as ItemModel } from "../Models/Item";
 import {Todolist} from "./Todolist";
 import {TodolistRepository} from "../Repositories/TodolistRepository";
+import {Mailer} from "../Mailer";
+import {UserRepository} from "../Repositories/UserRepository";
+import {User} from "./User";
 
 export class Item extends EntityManager {
 
     constructor() {
         super();
-        this.creationDate = new Date();
     }
 
     modelInstance = ItemModel;
@@ -17,6 +19,7 @@ export class Item extends EntityManager {
     creationDate: null|Date = null;
     TodolistId: null|number = null;
 
+    createdAt: null|Date = null;
     Todolist: null|Todolist = null
 
     setName(name: string) {
@@ -31,6 +34,9 @@ export class Item extends EntityManager {
     setTodolistId(TodolistId: number) {
         this.TodolistId = TodolistId;
     }
+    setCreatedAt(createdAt: number|Date|string) {
+        this.createdAt = (typeof(createdAt) == "number" || typeof(createdAt) == "string") ? new Date(createdAt) : createdAt;
+    }
 
     getTodolist() {
         if (!(this.Todolist instanceof Todolist) && this.Todolist != null) {
@@ -39,19 +45,19 @@ export class Item extends EntityManager {
         return this.Todolist;
     }
 
-    async isValid() {
+    async isValid(returnInfoMailer = false) {
         let errors: Array<string> = [];
 
         if (this.TodolistId == null) {
             errors.push("TODOLIST_NOT_SPECIFIED");
-            return errors;
+            return {type: "error", errors};
         }
 
         let todoList = await TodolistRepository.find(this.TodolistId);
 
         if (todoList == null) {
             errors.push("TODOLIST_NOT_EXIST");
-            return errors;
+            return {type: "error", errors};
         }
 
         const items = todoList.getItems();
@@ -77,13 +83,31 @@ export class Item extends EntityManager {
             errors.push("CONTENT_TOO_LONG");
         }
 
-        let lastItem = items[items.length-1];
+        if (items.length > 0) {
+            let lastItem = items[items.length - 1];
+            let currentTime = new Date();
 
-        if ((<Date>this.creationDate).getTime() - lastItem.creationDate.getTime() < 30*60*1000) {
-            errors.push("LAST_ITEM_CREATED_LESS_THAN_30_MINUTES");
+            if (currentTime.getTime() - lastItem.createdAt.getTime() < 30 * 60 * 1000) {
+                errors.push("LAST_ITEM_CREATED_LESS_THAN_30_MINUTES");
+            }
+        }
+        let infoMailer;
+        if (errors.length == 0 && items.length == 7) {
+            let user: User = <User> await UserRepository.find(todoList.UserId);
+            let mailer = new Mailer();
+            mailer.addDestinations(user.email);
+            mailer.setMessage("Attention! Vous avez ajouté 8 items sur votre todolist, il ne vous en reste plus que 2!");
+            mailer.setSubject("Plus que 2 items restant!");
+            mailer.setFromName("Projet test unitaire");
+            mailer.setFromEmail(mailer.user);
+            if (returnInfoMailer) {
+                infoMailer = await mailer.send();
+            } else {
+                mailer.send();
+            }
         }
 
-        return errors.length > 0 ? errors : true;
+        return errors.length > 0 ?  {type: "error", errors} : {type: "success", ...(returnInfoMailer ? { infoMailer } : {})};
     }
 }
 
