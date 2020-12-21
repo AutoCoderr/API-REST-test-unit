@@ -95,6 +95,69 @@ describe('Cinquieme test ', function(){
     })
 })
 
+describe('Sixieme test ', function(){
+    it("Ajout onzieme item", async function(){
+        const {user, todolist} = await createUserAndTodolist();
+        let itemsList = [];
+        for (let i = 0; i<10; i++)
+        {
+            let item = new Item();
+            item.setTodolistId(todolist.id);
+            item.setName("Minion " + (i+1));
+            item.setContent("Banane " + (i+1));
+            item.setCreatedAt((new Date()).getTime()-(40*60*1000)*(10-i));
+            await item.save();
+            itemsList.push(item);
+        }
+        let item = new Item();
+        item.setTodolistId(todolist.id);
+        item.setName("Gru");
+        item.setContent("Licorne");
+        let value = await item.isValid(true);
+        expect(value).toEqual({type : "error", errors : ["TODOLIST_HAS_ALREADY_10_ITEMS"]});
+        for (let unItem of itemsList)
+        {
+            unItem.delete();
+        }
+        todolist.delete();
+        user.delete();
+    })
+})
+
+describe('Septieme test ', function(){
+    it("Test ajout sans ecart temps", async function(){
+        const {user, todolist} = await createUserAndTodolist();
+        let item = new Item();
+        item.setTodolistId(todolist.id);
+        item.setName("Geralt");
+        item.setContent("Ciri");
+        await item.save();
+        let item2 = new Item();
+        item2.setTodolistId(todolist.id);
+        item2.setName("Yennefer");
+        item2.setContent("Triss");
+        const value = await item2.isValid();
+        expect(value).toEqual({type : "error", errors : ["LAST_ITEM_CREATED_LESS_THAN_30_MINUTES"]});
+        item.delete();
+        todolist.delete();
+        user.delete();
+    })
+})
+
+describe('Huitieme et dernier test ', function(){
+    it("Test où tout va bien", async function(){
+        const {user, todolist} = await createUserAndTodolist();
+        let item = new Item();
+        item.setTodolistId(todolist.id);
+        item.setName("Bowser");
+        item.setContent("Ganondorf");
+        const value = await item.isValid();
+        expect(value).toEqual({type : "success"});
+        todolist.delete();
+        user.delete();
+    })
+})
+
 async function createUserAndTodolist(){
     const user = new User();
 
