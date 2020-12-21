@@ -66,7 +66,7 @@ export class Item extends EntityManager {
             errors.push("TODOLIST_HAS_ALREADY_10_ITEMS");
         }
 
-        if (this.name?.length == 0) {
+        if ( this.name == null || this.name?.length == 0 ) {
             errors.push("NAME_NOT_SPECIFIED");
         } else {
             for (let item of items) {
@@ -77,7 +77,7 @@ export class Item extends EntityManager {
             }
         }
 
-        if (this.content?.length == 0) {
+        if (this.content == null || this.content?.length == 0) {
             errors.push("CONTENT_NOT_SPECIFIED")
         } else if (<number>this.content?.length > 1000) {
             errors.push("CONTENT_TOO_LONG");
@@ -96,8 +96,8 @@ export class Item extends EntityManager {
             let user: User = <User> await UserRepository.find(todoList.UserId);
             let mailer = new Mailer();
             mailer.addDestinations(user.email);
-            mailer.setMessage("Attention! Vous avez ajouté 8 items sur votre todolist, il ne vous en reste plus que 2!");
-            mailer.setSubject("Plus que 2 items restant!");
+            mailer.setMessage("Attention ! Vous avez ajouté 8 items sur votre todolist, il ne vous en reste plus que 2 !");
+            mailer.setSubject("Plus que 2 items restant !");
             mailer.setFromName("Projet test unitaire");
             mailer.setFromEmail(mailer.user);
             if (returnInfoMailer) {
