@@ -83,9 +83,9 @@ describe('Cinquieme test ', function(){
         item.setTodolistId(todolist.id);
         item.setName("Obiwan");
         item.setContent("Darth Vador");
-        const value = await item.isValid(true);
-        console.log("COUCOU TU VEUX VOIR MON BIT ???");
-        //expect(value).toEqual({type : "error", errors : ["CONTENT_TOO_LONG"]});
+        let value = await item.isValid(true);
+        value = value.infoMailer.response.split(" ").slice(0,3).join(" ");
+        expect(value).toEqual("250 2.0.0 OK");
         for (let unItem of itemsList)
         {
             unItem.delete();
@@ -100,8 +100,8 @@ async function createUserAndTodolist(){
 
     user.setFirstname('Bruce');
     user.setLastname('Wayne');
-    user.setEmail('mello.julien@gmail.com');
-    user.setPassword('IronManSucks');
+    user.setEmail('Bruce.wayne@wayne.com');
+    user.setPassword('IronManSucksIceCream');
     user.setBirthday('1988-12-25');
 
     await user.save();
