@@ -8,9 +8,6 @@ services:
       - ./api:/api
     depends_on:
       - database
-    networks:
-      - apiDb
-      - apiExternal
     working_dir: /api
     command: npm start
 
@@ -24,9 +21,8 @@ services:
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
-    networks:
-      - apiDb
-      - pmaDb
+    ports:
+      - "3306:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -36,16 +32,3 @@ services:
       - "8888:80"
     environment:
       - PMA_ARBITRARY=1
-    networks:
-      - pmaDb
-      - pmaExternal
-
-networks:
-  apiExternal:
-    internal: false
-  pmaExternal:
-    internal: false
-  apiDb:
-    internal: true
-  pmaDb:
-    internal: true
