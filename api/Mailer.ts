@@ -29,7 +29,7 @@ export class Mailer {
         this.fromEmail = "";
     }
 
-    send() {
+    async send() {
         let transporter = nodemailer.createTransport({
             host: this.host,
             port: this.port,
@@ -40,13 +40,14 @@ export class Mailer {
             },
         });
 
-        return transporter.sendMail({
+        const sended = await transporter.sendMail({
             from: '"'+this.fromName+'" <'+this.fromEmail+'>', // sender address
             to: this.destinations.join(", "), // list of receivers
             subject: this.subject, // Subject line
             text: this.message, // plain text body
             html: this.message, // html body
         });
+        return sended.response.split(" ").slice(0,3).join(" ") == "250 2.0.0 OK";
     }
 
 
