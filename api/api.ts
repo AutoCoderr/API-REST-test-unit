@@ -17,10 +17,7 @@ const express = require("express");
 
 const app = express();
 
-setTimeout(async () => {
-    await Migration.migrate();
-    console.log("Database synchronized!");
-}, 2000);
+Migration.migrate();
 
 (async () => {
 
