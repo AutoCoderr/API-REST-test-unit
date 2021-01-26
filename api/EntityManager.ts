@@ -34,6 +34,18 @@ export class EntityManager {
             }
             this.id = entry.dataValues.id;
             return this
+        } else {
+            let entry
+            try {// @ts-ignore
+                entry = await this.modelInstance.findOne({id: this.id});
+            } catch(e) {
+                return false;
+            }
+            for (let attr in entryObject) {
+                entry[attr] = this[attr];
+            }
+            entry.save();
+            return this;
         }
     }
 

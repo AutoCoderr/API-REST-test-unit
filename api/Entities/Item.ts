@@ -70,7 +70,7 @@ export class Item extends EntityManager {
             errors.push("NAME_NOT_SPECIFIED");
         } else {
             for (let item of items) {
-                if (item.name == this.name) {
+                if (item.name == this.name && this.id != item.id) {
                     errors.push("NAME_ALREADY_USED");
                     break;
                 }
@@ -83,7 +83,7 @@ export class Item extends EntityManager {
             errors.push("CONTENT_TOO_LONG");
         }
 
-        if (items.length > 0) {
+        if (items.length > 0 && this.id == null) {
             let lastItem = items[items.length - 1];
             let currentTime = new Date();
 
