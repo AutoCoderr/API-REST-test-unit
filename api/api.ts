@@ -66,3 +66,9 @@ Migration.migrate();
     console.log("Item > Todolist");
     console.log((<Item>foundItem).getTodolist());*/
 })();
+
+// @ts-ignore
+String.prototype.ucfirst = function() {
+    let chaine = this.valueOf();
+    return chaine[0].toUpperCase()+chaine.substring(1);
+}

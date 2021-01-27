@@ -49,7 +49,7 @@ export class User extends EntityManager {
         else if (this.password.length > 40)
             errors.push("TOO_LONG_PASSWORD");
 
-        return errors.length > 0 ? errors : true;
+        return errors.length > 0 ? {type: "error", errors} : {type: "success"};
     }
 
     getTodolist() {

@@ -7,7 +7,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: true,
+        exceptValid: {type: "success"},
         exceptSave: User
     },
     {
@@ -16,7 +16,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: ["FIRSTNAME_LASTNAME_INVALID"],
+        exceptValid: {type: "error", errors: ["FIRSTNAME_LASTNAME_INVALID"]},
         exceptSave: User
     },
     {
@@ -25,7 +25,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: ["FIRSTNAME_LASTNAME_INVALID"],
+        exceptValid: {type: "error", errors: ["FIRSTNAME_LASTNAME_INVALID"]},
         exceptSave: User
     },
     {
@@ -34,7 +34,7 @@ const users = [
         email: "zefuizeufhi",
         birthday: "2005-08-10",
         password: "12345678",
-        exceptValid: ["INVALID_MAIL"],
+        exceptValid: {type: "error", errors: ["INVALID_MAIL"]},
         exceptSave: User
     },
     {
@@ -43,7 +43,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2010-08-10",
         password: "12345678",
-        exceptValid: ["TOO_YOUNG"],
+        exceptValid: {type: "error", errors: ["TOO_YOUNG"]},
         exceptSave: User
     },
     {
@@ -52,7 +52,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "1234345678910111213141516171819202122232425",
-        exceptValid: ["TOO_LONG_PASSWORD"],
+        exceptValid: {type: "error", errors: ["TOO_LONG_PASSWORD"]},
         exceptSave: false
     },
     {
@@ -61,7 +61,7 @@ const users = [
         email: "totodu78@hotmail.com",
         birthday: "2005-08-10",
         password: "1234",
-        exceptValid: ["TOO_SHORT_PASSWORD"],
+        exceptValid: {type: "error", errors: ["TOO_SHORT_PASSWORD"]},
         exceptSave: User
     }
 ];

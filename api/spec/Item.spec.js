@@ -44,7 +44,7 @@ describe('Troisieme test ', function(){
         item2.setTodolistId(todolist.id);
         item2.setName("Nabudochonosor");
         item2.setContent("Pericles");
-        const value = await item.isValid();
+        const value = await item2.isValid();
         expect(value).toEqual({type : "error", errors : ["NAME_ALREADY_USED"]});
         item.delete();
         todolist.delete();
