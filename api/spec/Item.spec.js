@@ -1,3 +1,4 @@
+const Mailer = require("../Mailer").Mailer;
 const User = require("../Entities/User").User;
 const Todolist = require( "../Entities/Todolist").Todolist;
 const Item = require("../Entities/Item").Item;
@@ -83,9 +84,12 @@ describe('Cinquieme test ', function(){
         item.setTodolistId(todolist.id);
         item.setName("Obiwan");
         item.setContent("Darth Vador");
-        let value = await item.isValid(true);
-        value = value.infoMailer.response.split(" ").slice(0,3).join(" ");
-        expect(value).toEqual("250 2.0.0 OK");
+
+        let mailer = new Mailer();
+        spyOn(mailer, "send").and.returnValue(true); // Set a mock on the send() method of the Mailer service, which return true
+
+        let value = await item.isValid(true, mailer);
+        expect(value).toEqual({type: "success", sended: true});
         for (let unItem of itemsList)
         {
             unItem.delete();

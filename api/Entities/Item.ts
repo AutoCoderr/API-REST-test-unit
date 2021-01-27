@@ -45,7 +45,7 @@ export class Item extends EntityManager {
         return this.Todolist;
     }
 
-    async isValid(returnInfoMailer = false) {
+    async isValid(returnSended = false, mailer = new Mailer()) {
         let errors: Array<string> = [];
 
         if (this.TodolistId == null) {
@@ -91,23 +91,22 @@ export class Item extends EntityManager {
                 errors.push("LAST_ITEM_CREATED_LESS_THAN_30_MINUTES");
             }
         }
-        let infoMailer;
+        let sended;
         if (errors.length == 0 && items.length == 7) {
             let user: User = <User> await UserRepository.find(todoList.UserId);
-            let mailer = new Mailer();
             mailer.addDestinations(user.email);
             mailer.setMessage("Attention ! Vous avez ajouté 8 items sur votre todolist, il ne vous en reste plus que 2 !");
             mailer.setSubject("Plus que 2 items restant !");
             mailer.setFromName("Projet test unitaire");
             mailer.setFromEmail(mailer.user);
-            if (returnInfoMailer) {
-                infoMailer = await mailer.send();
+            if (returnSended) {
+                sended = await mailer.send();
             } else {
                 mailer.send();
             }
         }
 
-        return errors.length > 0 ?  {type: "error", errors} : {type: "success", ...(returnInfoMailer ? { infoMailer } : {})};
+        return errors.length > 0 ?  {type: "error", errors} : {type: "success", ...(returnSended ? { sended } : {})};
     }
 }
 
