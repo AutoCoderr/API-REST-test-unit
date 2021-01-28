@@ -82,3 +82,47 @@ UserController.get("/edit", async (req: any, res: any) => {
     }
     res.send(JSON.stringify({status: "error", msg: "Invalid item", errors: isValidRes.type == "error" ? isValidRes.errors : ["CAN'T ADD TO DATABASE"]}));
 });
+
+UserController.get("/delete", async (req: any, res: any) => {
+    const checkedArguments = Helper.checkArgs(req.query, {
+        id: {type: "number"}
+    })
+    if (checkedArguments != true) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid user delete",
+            errors: checkedArguments
+        }));
+        return;
+    }
+
+    let user: null|User = await UserRepository.find(parseInt(req.query.id));
+    if (user == null) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid user delete",
+            errors: ["This user does not exist"]
+        }));
+        return;
+    }
+    if (user.getTodolist() != null) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid user delete",
+            errors: ["This user have a todolist"]
+        }));
+        return;
+    }
+    if (!user.delete()) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid user delete",
+            errors: ["This user cannot be deleted"]
+        }));
+        return;
+    }
+    res.send(JSON.stringify({
+        status: "success",
+        msg: "user successfully deleted"
+    }));
+});

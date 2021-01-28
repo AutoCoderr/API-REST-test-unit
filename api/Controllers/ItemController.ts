@@ -64,3 +64,39 @@ ItemController.get("/edit", async (req: any, res: any) => {
     }
     res.send(JSON.stringify({status: "error", msg: "Invalid item", errors: isValidRes.type == "error" ? isValidRes.errors : ["CAN'T ADD TO DATABASE"]}));
 });
+
+ItemController.get("/delete", async (req: any, res: any) => {
+    const checkedArguments = Helper.checkArgs(req.query, {
+        id: {type: "number"}
+    })
+    if (checkedArguments != true) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid item delete",
+            errors: checkedArguments
+        }));
+        return;
+    }
+
+    let item: null|Item = await ItemRepository.find(parseInt(req.query.id));
+    if (item == null) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid item delete",
+            errors: ["This item does not exist"]
+        }));
+        return;
+    }
+    if (!item.delete()) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid item delete",
+            errors: ["This item cannot be deleted"]
+        }));
+        return;
+    }
+    res.send(JSON.stringify({
+        status: "success",
+        msg: "Item successfully deleted"
+    }));
+});
