@@ -4,15 +4,33 @@ const express = require('express')
 export const TodolistController = express.Router();
 import { Todolist } from "../Entities/Todolist";
 import {TodolistRepository} from "../Repositories/TodolistRepository";
+import { User } from "../Models/User";
+import { UserRepository } from "../Repositories/UserRepository";
 
 
 /* Route => /todolist */
 
 TodolistController.get("/create", async (req: any, res: any) => {
-    const todolist = new Todolist();
-    if (req.query.UserId) {
-        todolist.setUserId(req.query.UserId);
+    const checkedArguments = Helper.checkArgs(req.query, {
+        UserId: {type: "number"}
+    });
+    if (checkedArguments != true) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid todolist",
+            errors: checkedArguments
+        }));
+        return;
     }
+
+    const user = await UserRepository.find(parseInt(req.query.UserId));
+    if (user == null){
+        res.send(JSON.stringify({status: "error", msg: "Invalid todolist", errors: ["User does not exist"]
+        }));
+        return;
+    }
+    const todolist = new Todolist();
+    todolist.setUserId(req.query.UserId);
     let isValidRes = await todolist.isValid();
     if (isValidRes == true) {
         let todolistSaved = await todolist.save()
@@ -64,6 +82,6 @@ TodolistController.get("/delete", async (req: any, res: any) => {
     }
     res.send(JSON.stringify({
         status: "success",
-        msg: "Item todolist deleted"
+        msg: "Todolist deleted"
     }));
 });

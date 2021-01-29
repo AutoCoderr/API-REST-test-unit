@@ -93,11 +93,13 @@ const httpUsersTests = [
 			password_confirm: "abcdef1234"
 		},
 		excepted: {status: "success", msg: "User successfully created", id: "*"},
-		toStores: ["id"],
+		toStores: {
+			id: "userid",
+		},
 		afters: [{
 			action: "/user/delete",
 			fields: {
-				id: "{{id}}"
+				id: "{{userid}}"
 			},
 			excepted: {status: "success", msg: "user successfully deleted"}
 		}]
@@ -127,38 +129,44 @@ const httpUsersTests = [
 			password_confirm: "abcdef1234"
 		},
 		excepted: {status: "success", msg: "User successfully created", id: "*"},
-		toStores: ["id"],
+		toStores: {
+			id: "userid",
+		},
 		afters: [{
 			action: "/user/edit",
 			fields: {
 				id: rand(1000,9999)
 			},
 			excepted: {status: "error", msg: "Invalid user edit", errors: ["This user does not exist"]}
-		},{
+		},
+		{
 			action: "/user/edit",
 			fields: {
 				id: "abcd"
 			},
 			excepted: {status: "error", msg: "Invalid user edit", errors: ["'id' invalid type"]}
-		},{
+		},
+		{
 			action: "/user/edit",
 			fields: {
-				id: "{{id}}",
+				id: "{{userid}}",
 				password: "123456789"
 			},
 			excepted: {status: "error", msg: "Invalid user edit", errors: ["You need to confirm your password"]}
-		},{
+		},
+		{
 			action: "/user/edit",
 			fields: {
-				id: "{{id}}",
+				id: "{{userid}}",
 				password: "123456789",
 				password_confirm: "123456789abcd"
 			},
 			excepted: {status: "error", msg: "Invalid user edit", errors: ["You need to confirm your password"]}
-		},{
+		},
+		{
 			action: "/user/edit",
 			fields: {
-				id: "{{id}}",
+				id: "{{userid}}",
 				password: "123456789",
 				password_confirm: "123456789"
 			},
@@ -166,12 +174,66 @@ const httpUsersTests = [
 			afters: [{
 				action: "/user/delete",
 				fields: {
-					id: "{{id}}"
+					id: "{{userid}}"
 				},
 				excepted: {status: "success", msg: "user successfully deleted"}
 			}]
 		}]
 	},
+	{
+		action: "/user/create",
+		fields: {
+			firstname: "Chris",
+			lastname: "Evans",
+			birthday: "1981-06-13",
+			email: "americaass@marvel.com",
+			password: "IAmWorthy",
+			password_confirm: "IAmWorthy"
+		},
+		excepted: {status: "success", msg: "User successfully created", id: "*"},
+		toStores: {
+			id: "userid",
+		},
+		afters: [
+			{
+				action: "/todolist/create",
+				fields: {
+					UserId: "{{userid}}"
+				},
+				excepted: {status: "success", msg: "Todolist successfully created", id: "*"},
+				toStores: {
+					id: "todolistId",
+				},
+				afters: [
+					{
+						action : "/user/delete",
+						fields: {
+							id: "{{userid}}"
+						},
+						excepted: {status: "error", msg: "Invalid user delete", errors: ["This user have a todolist"]},
+						afters: [
+							{
+								action: "/todolist/delete",
+								fields: {
+									id : "{{todolistId}}"
+								},
+								excepted: {status: "success", msg: "Todolist deleted"},
+								afters: [
+									{
+										action: "/user/delete",
+										fields: {
+											id: "{{userid}}"
+										},
+										excepted: {status: "success", msg: "user successfully deleted"}
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	}
 ];
 
 for (let i=0;i<httpUsersTests.length;i++) {
@@ -193,9 +255,9 @@ async function checkUser(user, params = {}) {
 	let body = JSON.parse(await res.text());
 
 	if (user.toStores !== undefined) {
-		for (let toStore of user.toStores) {
-			if (body[toStore] !== undefined) {
-				params[toStore] = body[toStore];
+		for (let key in user.toStores){
+			if (body[key] !== undefined){
+				params[user.toStores[key]] = body[key];
 			}
 		}
 	}
