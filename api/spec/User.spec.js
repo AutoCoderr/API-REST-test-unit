@@ -68,7 +68,7 @@ const users = [
 
 for (let i=0;i<users.length;i++) {
     const user = users[i]; // @ts-ignore
-    describe("Checking of user N°"+(i+1),function(){
+    describe("Checking of user N°"+(i+1),() => {
         let userObject = new User();
         userObject.setFirstname(user.firstname);
         userObject.setLastname(user.lastname);
@@ -95,3 +95,4 @@ for (let i=0;i<users.length;i++) {
         });
     });
 }
+

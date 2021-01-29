@@ -13,6 +13,10 @@ export class Helper {
         }
         return errors.length > 0 ? errors : true;
     }
+
+    static computeGETUrl(url, fields) {
+        return url+"?"+Object.keys(fields).map((key) => key+"="+fields[key]).join("&");
+    }
 }
 
 function getType(field) {

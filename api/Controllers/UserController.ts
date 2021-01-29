@@ -9,12 +9,41 @@ import {UserRepository} from "../Repositories/UserRepository";
 /* Route => /user */
 
 UserController.get('/create',async (req: any, res: any) => {
+    const fields = {
+        email: {type: "string"},
+        firstname: {type: "string"},
+        lastname: {type: "string"},
+        birthday: {type: "string"},
+        password: {type: "string"},
+        password_confirm: {type: "string"}
+    }
+    const checkedArguments = Helper.checkArgs(req.query, fields);
+    if (checkedArguments != true) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid user",
+            errors: checkedArguments
+        }));
+        return;
+    }
+
     let user = new User();
-    user.setFirstname(req.query.firstname ? req.query.firstname : "");
-    user.setLastname(req.query.lastname ? req.query.lastname : "");
-    user.setEmail(req.query.email ? req.query.email : "");
-    user.setBirthday(req.query.birthday ? req.query.birthday : "1900-01-01");
-    user.setPassword(req.query.password ? req.query.password : "");
+
+    for (let field in fields) {
+        if (field != "password" && field != "password_confirm") {// @ts-ignore
+            user["set" + field.ucfirst()](req.query[field])
+        } else if (field == "password") {
+            if (req.query.password_confirm == undefined || req.query.password_confirm != req.query.password) {
+                res.send(JSON.stringify({
+                    status: "error",
+                    msg: "Invalid user",
+                    errors: ["You need to confirm your password"]
+                }));
+                return;
+            }
+            user.setPassword(req.query.password);
+        }
+    }
 
     let isValidRes = await user.isValid();
     if (isValidRes.type == "success") {
@@ -41,7 +70,7 @@ UserController.get("/edit", async (req: any, res: any) => {
     if (checkedArguments != true) {
         res.send(JSON.stringify({
             status: "error",
-            msg: "Invalid item edit",
+            msg: "Invalid user edit",
             errors: checkedArguments
         }));
         return;
@@ -80,7 +109,7 @@ UserController.get("/edit", async (req: any, res: any) => {
             return;
         }
     }
-    res.send(JSON.stringify({status: "error", msg: "Invalid item", errors: isValidRes.type == "error" ? isValidRes.errors : ["CAN'T ADD TO DATABASE"]}));
+    res.send(JSON.stringify({status: "error", msg: "Invalid user edit", errors: isValidRes.type == "error" ? isValidRes.errors : ["CAN'T ADD TO DATABASE"]}));
 });
 
 UserController.get("/delete", async (req: any, res: any) => {
