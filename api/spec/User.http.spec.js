@@ -1,5 +1,4 @@
 const Helper = require("../Helper").Helper;
-const fetch = require('node-fetch');
 
 String.prototype.interpolate = require("../libs/interpolate");
 
@@ -239,43 +238,8 @@ const httpUsersTests = [
 for (let i=0;i<httpUsersTests.length;i++) {
 	const user = httpUsersTests[i];
 	describe("Checking of http user request N°"+(i+1), () => {
-		it("The expected value of http is : "+JSON.stringify(user.excepted), () => {checkUser(user)})
+		it("The expected value of http is : "+JSON.stringify(user.excepted), () => {Helper.executeTests(user)})
 	});
-}
-
-async function checkUser(user, params = {}) {
-	for (let field in user.fields) {
-		if (typeof(user.fields[field]) == "string") {
-			user.fields[field] = user.fields[field].interpolate(params);
-		}
-	}
-
-	let url = Helper.computeGETUrl(user.action, user.fields);
-	const res = await fetch('http://127.0.0.1'+url);
-	let body = JSON.parse(await res.text());
-
-	if (user.toStores !== undefined) {
-		for (let key in user.toStores){
-			if (body[key] !== undefined){
-				params[user.toStores[key]] = body[key];
-			}
-		}
-	}
-
-	for (let key in user.excepted) {
-		if (user.excepted[key] === "*") {
-			delete user.excepted[key];
-			if (body[key] !== undefined) {
-				delete body[key];
-			}
-		}
-	}
-	expect(body).toEqual(user.excepted);
-	if (user.afters !== undefined) {
-		for (let after of user.afters) {
-			checkUser(after, params);
-		}
-	}
 }
 
 function rand(a,b) {

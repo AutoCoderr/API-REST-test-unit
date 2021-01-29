@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 export class Helper {
     static checkArgs(query,types) {
         let errors: Array<string> = [];
@@ -16,6 +18,41 @@ export class Helper {
 
     static computeGETUrl(url, fields) {
         return url+"?"+Object.keys(fields).map((key) => key+"="+fields[key]).join("&");
+    }
+
+    static async executeTests(test,params = {}) {
+        for (let field in test.fields) {
+            if (typeof(test.fields[field]) == "string") {
+                test.fields[field] = test.fields[field].interpolate(params);
+            }
+        }
+
+        let url = this.computeGETUrl(test.action, test.fields);
+        const res = await fetch('http://127.0.0.1'+url);
+        let body = JSON.parse(await res.text());
+
+        if (test.toStores !== undefined) {
+            for (let key in test.toStores){
+                if (body[key] !== undefined){
+                    params[test.toStores[key]] = body[key];
+                }
+            }
+        }
+
+        for (let key in test.excepted) {
+            if (test.excepted[key] === "*") {
+                delete test.excepted[key];
+                if (body[key] !== undefined) {
+                    delete body[key];
+                }
+            }
+        }// @ts-ignore
+        expect(body).toEqual(test.excepted);
+        if (test.afters !== undefined) {
+            for (let after of test.afters) {
+                this.executeTests(after, params);
+            }
+        }
     }
 }
 
