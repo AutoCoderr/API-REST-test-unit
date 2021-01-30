@@ -50,7 +50,7 @@ export class Helper {
         expect(body).toEqual(test.excepted);
         if (test.afters !== undefined) {
             for (let after of test.afters) {
-                this.executeTests(after, params);
+                await this.executeTests(after, params);
             }
         }
     }

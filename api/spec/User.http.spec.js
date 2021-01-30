@@ -238,7 +238,9 @@ const httpUsersTests = [
 for (let i=0;i<httpUsersTests.length;i++) {
 	const user = httpUsersTests[i];
 	describe("Checking of http user request N°"+(i+1), () => {
-		it("The expected value of http is : "+JSON.stringify(user.excepted), () => {Helper.executeTests(user)})
+		it("The expected value of http is : "+JSON.stringify(user.excepted), async () => {
+			return await Helper.executeTests(user)
+		})
 	});
 }
 

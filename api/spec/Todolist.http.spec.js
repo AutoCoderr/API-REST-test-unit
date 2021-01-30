@@ -72,6 +72,8 @@ const httpTodolistTests = [
 for (let i=0;i<httpTodolistTests.length;i++) {
 	const todolist = httpTodolistTests[i];
 	describe("Checking of http todolist request N°"+(i+1), () => {
-		it("The expected value of http is : "+JSON.stringify(todolist.excepted), () => {Helper.executeTests(todolist)})
+		it("The expected value of http is : "+JSON.stringify(todolist.excepted), async () => {
+		    return await Helper.executeTests(todolist)
+		})
 	});
 }
