@@ -1,3 +1,5 @@
+import {TodolistRepository} from "../Repositories/TodolistRepository";
+
 const express = require('express')
 export const ItemController = express.Router();
 import { Item } from "../Entities/Item";
@@ -7,12 +9,34 @@ import { ItemRepository } from "../Repositories/ItemRepository";
 /* Route => /item */
 
 ItemController.get("/create", async (req: any, res: any) => {
-    const item = new Item();
-    if (req.query.TodolistId) {
-        item.setTodolistId(req.query.TodolistId);
+    const checkedArguments = Helper.checkArgs(req.query, {
+        TodolistId: {type: "number"},
+        name: {type: "string"},
+        content: {type: "string"}
+    })
+    if (checkedArguments != true) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid item",
+            errors: checkedArguments
+        }));
+        return;
     }
-    item.setName(req.query.name ? req.query.name : "");
-    item.setContent(req.query.content ? req.query.content : "");
+
+    const todolist = await TodolistRepository.find(parseInt(req.query.TodolistId))
+    if(todolist === null) {
+        res.send(JSON.stringify({
+            status: "error",
+            msg: "Invalid item",
+            errors: ["This todolist does not exist"]
+        }));
+        return;
+    }
+
+    const item = new Item();
+    item.setTodolistId(req.query.TodolistId);
+    item.setName(req.query.name);
+    item.setContent(req.query.content);
 
     let isValidRes: any = await item.isValid();
     if (isValidRes.type == "success") {

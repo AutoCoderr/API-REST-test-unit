@@ -105,7 +105,7 @@ UserController.get("/edit", async (req: any, res: any) => {
     if (isValidRes.type == "success") {
         let userSaved = await user.save()
         if (userSaved) {
-            res.send(JSON.stringify({status: "success", msg: "user successfully edited", id: userSaved.id}));
+            res.send(JSON.stringify({status: "success", msg: "User successfully edited", id: userSaved.id}));
             return;
         }
     }
@@ -152,6 +152,6 @@ UserController.get("/delete", async (req: any, res: any) => {
     }
     res.send(JSON.stringify({
         status: "success",
-        msg: "user successfully deleted"
+        msg: "User successfully deleted"
     }));
 });

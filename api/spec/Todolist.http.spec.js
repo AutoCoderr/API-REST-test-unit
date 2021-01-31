@@ -57,11 +57,42 @@ const httpTodolistTests = [
                 },
                 afters: [
                     {
-                        action: "/todolist/delete",
+                        action: "/item/create",
                         fields: {
-                            id: "{{ todolistId }}",
+                            TodolistId: "{{todolistId}}",
+                            name: "A name",
+                            content: "A content"
                         },
-                        excepted: {status: "success", msg: "Todolist deleted"}
+                        excepted: {status: "success", msg: "Item successfully created", id: "*"},
+                        toStores: {id: "itemId"},
+                        afters: [
+                            {
+                                action: "/todolist/delete",
+                                fields: {
+                                    id: "{{ todolistId }}",
+                                },
+                                excepted: {status: "error", msg: "Invalid todolist delete", errors: ["This todolist have one or some items"]},
+                                afters: [
+                                    {
+                                        action: "/item/delete",
+                                        fields: {
+                                            id: "{{itemId}}"
+                                        },
+                                        excepted: {status: "success", msg: "Item successfully deleted"},
+                                        afters: [
+                                            {
+                                                action: "/todolist/delete",
+                                                fields: {
+                                                    id: "{{todolistId}}",
+                                                },
+                                                excepted: {status: "success", msg: "Todolist successfully deleted"}
+                                            }
+                                        ]
+                                    }
+                                ]
+
+                            }
+                        ]
                     }
                 ]
             }

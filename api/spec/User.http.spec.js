@@ -100,7 +100,7 @@ const httpUsersTests = [
 			fields: {
 				id: "{{userid}}"
 			},
-			excepted: {status: "success", msg: "user successfully deleted"}
+			excepted: {status: "success", msg: "User successfully deleted"}
 		}]
 	},
 	{
@@ -169,13 +169,13 @@ const httpUsersTests = [
 				password: "123456789",
 				password_confirm: "123456789"
 			},
-			excepted: {status: "success", msg: "user successfully edited", id: "*"},
+			excepted: {status: "success", msg: "User successfully edited", id: "*"},
 			afters: [{
 				action: "/user/delete",
 				fields: {
 					id: "{{userid}}"
 				},
-				excepted: {status: "success", msg: "user successfully deleted"}
+				excepted: {status: "success", msg: "User successfully deleted"}
 			}]
 		}]
 	},
@@ -216,14 +216,14 @@ const httpUsersTests = [
 								fields: {
 									id : "{{todolistId}}"
 								},
-								excepted: {status: "success", msg: "Todolist deleted"},
+								excepted: {status: "success", msg: "Todolist successfully deleted"},
 								afters: [
 									{
 										action: "/user/delete",
 										fields: {
 											id: "{{userid}}"
 										},
-										excepted: {status: "success", msg: "user successfully deleted"}
+										excepted: {status: "success", msg: "User successfully deleted"}
 									}
 								]
 							}

@@ -64,6 +64,7 @@ TodolistController.get("/delete", async (req: any, res: any) => {
         }));
         return;
     }
+    console.log(todolist.getItems());
     if (todolist.getItems().length > 0) {
         res.send(JSON.stringify({
             status: "error",
@@ -82,6 +83,6 @@ TodolistController.get("/delete", async (req: any, res: any) => {
     }
     res.send(JSON.stringify({
         status: "success",
-        msg: "Todolist deleted"
+        msg: "Todolist successfully deleted"
     }));
 });
