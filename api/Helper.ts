@@ -21,6 +21,7 @@ export class Helper {
     }
 
     static async executeTests(test,params = {}) {
+        if (test.stop) return;
         for (let field in test.fields) {
             if (typeof(test.fields[field]) == "string") {
                 test.fields[field] = test.fields[field].interpolate(params);

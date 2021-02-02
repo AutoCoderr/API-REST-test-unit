@@ -111,7 +111,7 @@ ItemController.get("/delete", async (req: any, res: any) => {
         }));
         return;
     }
-    if (!item.delete()) {
+    if (!(await item.delete())) {
         res.send(JSON.stringify({
             status: "error",
             msg: "Invalid item delete",

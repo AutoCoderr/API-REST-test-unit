@@ -89,7 +89,7 @@ for (let i=0;i<users.length;i++) {
             } else {// @ts-ignore
                 expect(createdUser).toBeInstanceOf(user.exceptSave);
                 // @ts-ignore
-                const deleted = createdUser.delete();// @ts-ignore
+                const deleted = await createdUser.delete();// @ts-ignore
                 expect(deleted).toBe(true);
             }
         });

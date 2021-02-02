@@ -142,7 +142,7 @@ UserController.get("/delete", async (req: any, res: any) => {
         }));
         return;
     }
-    if (!user.delete()) {
+    if (!(await user.delete())) {
         res.send(JSON.stringify({
             status: "error",
             msg: "Invalid user delete",

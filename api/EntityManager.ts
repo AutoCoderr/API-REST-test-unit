@@ -49,13 +49,13 @@ export class EntityManager {
         }
     }
 
-    delete() {
+    async delete() {
         try { // @ts-ignore
-            this.modelInstance.destroy({
+            await this.modelInstance.destroy({
                 where: {
                     id: this.id
                 }
-            })
+            });
         } catch (e) {
             return false;
         }

@@ -76,16 +76,25 @@ const httpTodolistTests = [
                                     {
                                         action: "/item/delete",
                                         fields: {
-                                            id: "{{itemId}}"
+                                            id: "{{ itemId }}"
                                         },
                                         excepted: {status: "success", msg: "Item successfully deleted"},
                                         afters: [
                                             {
                                                 action: "/todolist/delete",
                                                 fields: {
-                                                    id: "{{todolistId}}",
+                                                    id: "{{ todolistId }}",
                                                 },
-                                                excepted: {status: "success", msg: "Todolist successfully deleted"}
+                                                excepted: {status: "success", msg: "Todolist successfully deleted"},
+                                                afters: [
+                                                    {
+                                                        action: "/user/delete",
+                                                        fields: {
+                                                            id: "{{ userId }}"
+                                                        },
+                                                        excepted: {status: "success", msg: "User successfully deleted"},
+                                                    }
+                                                ]
                                             }
                                         ]
                                     }
